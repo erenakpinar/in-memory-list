@@ -1,0 +1,48 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: inmemorylist
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      base-path: /_monitoring
+  health:
+    defaults:
+      enabled: true
+
+
+rabbit:
+  retry-policy:
+    max-attempt: 1
+    initial-interval: 2000
+    multiplier: 1.0
+    max-interval: 2000
+  events:
+    couchbase-category-changed-event:
+      exchange: category.changed.exchange
+      queue: category.updated.queue
+      routing-key: "#"
+
+---
+spring:
+  profiles: local
+  application:
+    name: inmemorylist
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+
+  data:
+    couchbase:
+      auto-index: true
+  couchbase:
+    connection-string: couchbase://localhost
+    username: guestuser
+    password: guestuser
+    categories-bucket: categories

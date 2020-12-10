@@ -1,0 +1,28 @@
+version: "3"
+services:
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - inmemory
+  couchbase:
+    image: couchbase/server
+    volumes:
+      - ~/couchbase/node1:/opt/couchbase/var
+    ports:
+      - 8091:8091
+      - 8092:8092
+      - 8093:8093
+      - 11210:11210
+    links:
+      - rabbitmq
+    networks:
+      - inmemory
+networks:
+  inmemory:
+    driver: "bridge"

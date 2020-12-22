@@ -22,10 +22,11 @@ public class MemoryUpdateConsumer {
             if (event.isDeleted()) {
                 categoryListProperties.removeCategory(event.getId());
                 log.info("Category removed. CategoryId: {}", event.getId());
-            } else {
-                categoryListProperties.setCategory(event.getId(), event.getName());
-                log.info("Category updated. CategoryId: {}", event.getId());
+                return;
             }
+
+            categoryListProperties.setCategory(event.getId(), event.getName());
+            log.info("Category updated. CategoryId: {}", event.getId());
         } catch (Exception e) {
             log.error("MemoryUpdateConsumer consumeCategoryChangedEvent listener error: {}, event: {}", e.getMessage(), event);
         }
